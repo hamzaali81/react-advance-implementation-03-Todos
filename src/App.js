@@ -1,26 +1,81 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+ 
+class App extends Component {
+constructor(){
+  super();
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  this.state={
+    todos: [],
+    text:'',
+    currentIndex: null
+  }
+  this.add=this.add.bind(this)
+   this.updateText=this.updateText.bind(this);
+  //  this.edit=this.edit.bind(this);
+  }
+
+
+updateText(e){
+this.setState({text: e.target.value})
 }
 
+edit(index){
+const {todos}=this.state;
+
+// todos[index]=text 
+this.setState({
+  text: todos[index],
+  currentIndex: index
+})
+}
+
+delete(){
+  
+}
+
+add(){
+const { text, todos} = this.state;
+// this.state.todos.push(text);
+todos.push(text);
+console.log('hey', this.state.todos);
+  this.setState({todos,text: ' '})
+}
+
+renderTodos(){
+  const {todos}=this.state;
+  return (
+    <ol>
+      {todos.map((item, index)=> 
+        <li key={index}>
+        {item}
+        <button onClick={this.edit.bind(this,index)}>Edit</button>
+        <button onClick={this.delete.bind(this,index)}>Delete</button>
+        </li>
+        )}
+    </ol>
+  )
+}
+
+render() { 
+    const {currentIndex}=this.state;
+    return (
+      <div>
+<input 
+type="text" placeholder="Something Place" 
+onChange={this.updateText}
+  value={this.state.text}
+/>
+{
+
+currentIndex ==null ? <button onClick={this.add}>Add</button>
+ : 
+<button onClick={()=>{}}>Update</button> 
+}
+      {currentIndex != null && <p>You are editing item # {currentIndex +1} currently!</p>}
+      {this.renderTodos()}
+      </div>
+    );
+  }
+}
+ 
 export default App;
